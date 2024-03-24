@@ -3,10 +3,10 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 const app = express();
 
-import authRoutes from "../routes/auth.routes.js";
-import messageRoutes from "../routes/message.routes.js";
-import userRoutes from "../routes/user.routes.js";
-import { connectToMongoDB } from "../DB/connectToMongoDB.js";
+import authRoutes from "./routes/auth.routes.js";
+import messageRoutes from "./routes/message.routes.js";
+import userRoutes from "./routes/user.routes.js";
+import { connectToMongoDB } from "./DB/connectToMongoDB.js";
 
 const PORT=process.env.PORT || 3000;
 
