@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import bycrypt from "bcryptjs";
-import generateToken from "../utils/token.js";
+// import generateToken from "../utils/token.js";
+import jwt from 'jsonwebtoken';
 export const signup = async (req, res) => {
   try {
     const { fullName, username, password, confirmPassword, gender } = req.body;
@@ -25,7 +26,6 @@ export const signup = async (req, res) => {
       profilePicture: gender === "male" ? maleProfile : femaleProfile,
     });
     if (newUser) {
-      generateToken(newUser._id, res);
       await newUser.save();
 
       res.status(201).json({
@@ -55,12 +55,18 @@ export const login = async (req, res) => {
     if (!user || !isPasswordCorrect) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
-    generateToken(user._id, res);
+
+   const token=await jwt.sign(user._id,process.env.JWT_SECRET,{  
+    expiresIn:'15d'
+    });
+   console.log(token);
     res.status(200).json({
       _id: user._id,
       fullName: user.fullName,
       username: user.username,
       profilePicture: user.profilePicture,
+      token:token
+      
     });
   } catch (error) {
     console.log("Error: ", error.message);
